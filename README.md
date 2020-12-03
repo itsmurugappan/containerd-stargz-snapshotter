@@ -62,7 +62,10 @@ move the files to k3s config directory and restart k3s
 
 ```shell
 sudo mv files/config.toml.tmpl /var/lib/rancher/k3s/agent/etc/containerd/
+# master
 sudo systemctl restart k3s
+# agent
+sudo systemctl restart k3s-agent
 ```
 
 Set up is complete on master, please do the same on all worker nodes
@@ -80,7 +83,7 @@ metadata:
 spec:
   containers:
   - name: gohw-estgz
-    image: ghcr.io/itsmurugappan/go-hw-esgz:latest
+    image: ghcr.io/itsmurugappan/go-hw-estgz:latest
     ports:
     - containerPort: 8080 
 
@@ -92,7 +95,7 @@ metadata:
 spec:
   containers:
   - name: gohw
-    image: ghcr.io/itsmurugappan/hw:latest
+    image: ghcr.io/itsmurugappan/go-hw:latest
     ports:
     - containerPort: 8080 
 ```

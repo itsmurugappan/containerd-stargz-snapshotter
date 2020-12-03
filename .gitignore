@@ -13,3 +13,4 @@ bazel-*
 upload
 
 node_modules
+StandaloneContainerd.md

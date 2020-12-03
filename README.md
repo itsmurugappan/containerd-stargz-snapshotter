@@ -33,10 +33,10 @@ for arm 64 image , download from this repo
 git clone https://github.com/itsmurugappan/stargz-snapshotter-k3s.git && \
 cd stargz-snapshotter-k3s/files && \
 sudo mv stargz-snapshotter.service /etc/systemd/system/ && \
-tar -xvf stargz-snapshotter-v0.1.0-linux-arm64.tar.gz && \
+sudo gunzip stargz-snapshotter-v0.1.0-linux-arm64.tar.gz || true && \
+sudo tar -xvf stargz-snapshotter-v0.1.0-linux-arm64.tar && \
 sudo chmod +x -R out/ && \
-sudo mv out/ /usr/local/bin/ && \
-sudo rm stargz-snapshotter-v0.1.0-linux-arm64.tar.gz && \
+sudo mv out/* /usr/local/bin/ && \
 sudo systemctl enable stargz-snapshotter && \
 sudo systemctl start stargz-snapshotter
 ```
@@ -96,8 +96,8 @@ spec:
     ports:
     - containerPort: 8080 
 ```
-* Plain image should start in 2 minutes
-* Stargz image should start in 20 seconds
+* Plain image should start in 2 minutes in a rpi cluster
+* Stargz image should start in 20 seconds in a rpi cluster
 * Both images are around 300 mb size
 
 ### Further steps

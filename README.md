@@ -101,7 +101,7 @@ spec:
 ```
 * Plain image should start in 2 minutes in a rpi cluster
 * Stargz image should start in 20 seconds in a rpi cluster
-* Both images are around 300 mb size
+* Both images are around 700 mb size
 
 ### Further steps
 

@@ -111,7 +111,7 @@ https://itsmurugappan.medium.com/knative-on-raspberry-pi-1106984de5b8
 
 ### Building estargz image
 
-For building the estargz image you need the ctr-remote client which would be installed as apart step number [2](#2-stargz-snapshotter)
+For building the estargz image you need the ctr-remote client which would be installed as part of step number [2](#2-stargz-snapshotter)
 
 ```
 # docker login

@@ -10,7 +10,7 @@ https://github.com/containerd/stargz-snapshotter
 
 ## Set Up
 
-This set up will be on arm64 cluster with Ubuntu
+This set up will be on arm64 cluster with Ubuntu (version: Ubuntu 20.04.1 LTS)
 
 ### 1. Install Fuse
 

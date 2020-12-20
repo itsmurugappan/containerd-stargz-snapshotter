@@ -10,7 +10,7 @@ https://github.com/containerd/stargz-snapshotter
 
 ## Set Up
 
-This set up will be on arm64 cluster
+This set up will be on arm64 cluster with Ubuntu
 
 ### 1. Install Fuse
 
@@ -50,16 +50,8 @@ once you start the k3s like below
 ```
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable=traefik" sh -s -
 ```
-Get the cni bin directory
 
-```shell
-sudo ls /var/lib/rancher/k3s/data/
-
-c302b35fc6551b29d5730cd6fd02747d3b063b3930cf16c090aedcbcc96c45d9  current
-```
-Replace that in the [tmpl file](./files/config.toml.tmpl#L19)
-
-move the files to k3s config directory and restart k3s
+move the containerd config files
 
 ```shell
 sudo mv files/config.toml.tmpl /var/lib/rancher/k3s/agent/etc/containerd/

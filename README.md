@@ -84,7 +84,7 @@ metadata:
 spec:
   containers:
   - name: gohw-estgz
-    image: ghcr.io/itsmurugappan/go-hw-estgz:latest
+    image: ghcr.io/itsmurugappan/go-hw-estgz:v1
     ports:
     - containerPort: 8080 
 

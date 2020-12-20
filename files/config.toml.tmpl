@@ -1,0 +1,20 @@
+version = 2
+
+# - Set default runtime handler to v2, which has a per-pod shim
+# - Enable to use stargz snapshotter
+# Use stargz snapshotter through CRI
+[plugins."io.containerd.grpc.v1.cri".containerd]
+  snapshotter = "stargz"
+  disable_snapshot_annotations = false
+
+# Plug stargz snapshotter into containerd
+# Containerd recognizes stargz snapshotter through specified socket address.
+# The specified address below is the default which stargz snapshotter listen to.
+[proxy_plugins]
+  [proxy_plugins.stargz]
+    type = "snapshot"
+    address = "/run/containerd-stargz-grpc/containerd-stargz-grpc.sock"
+
+[plugins."io.containerd.grpc.v1.cri".cni]
+  bin_dir = "/var/lib/rancher/k3s/data/c302b35fc6551b29d5730cd6fd02747d3b063b3930cf16c090aedcbcc96c45d9/bin"
+  conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d"

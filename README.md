@@ -30,16 +30,18 @@ For amd-64 image , please fetch from the release folder of the stargz snapshotte
 for arm 64 image , download from this repo
 
 ```shell
+pushd $(pwd) && \
 git clone https://github.com/itsmurugappan/stargz-snapshotter-k3s.git && \
 cd stargz-snapshotter-k3s/files && \
-sudo mv config/etc/containerd-stargz-grpc /etc/ && \
+sudo mkdir -p /etc/containerd-stargz-grpc && \
+sudo mv config/etc/containerd-stargz-grpc/config.toml /etc/containerd-stargz-grpc/ && \
 sudo mv stargz-snapshotter.service /etc/systemd/system/ && \
 sudo gunzip stargz-snapshotter-v0.2.0-linux-arm64.tar.gz || true && \
 sudo tar -xvf stargz-snapshotter-v0.2.0-linux-arm64.tar && \
 sudo chmod +x -R out/ && \
 sudo mv out/* /usr/local/bin/ && \
 sudo systemctl enable stargz-snapshotter && \
-sudo systemctl start stargz-snapshotter
+sudo systemctl restart stargz-snapshotter
 ```
 
 ### 3. k3s
@@ -62,6 +64,12 @@ sudo systemctl restart k3s-agent
 ```
 
 Set up is complete on master, please do the same on all worker nodes
+
+#### cleanup
+```shell
+popd && \
+sudo rm -rf stargz-snapshotter-k3s
+```
 
 ### Testing
 

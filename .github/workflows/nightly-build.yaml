@@ -7,14 +7,13 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-20.04
-    name: Build on ubuntu-20.04 armv64
+    name: Build
     strategy:
       matrix:
         go-version: [1.15.x]
-        include:
-          - arch: aarch64
-            distro: ubuntu20.04
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
 
     steps:
 
@@ -24,41 +23,15 @@ jobs:
           go-version: ${{ matrix.go-version }}
         id: go
 
-      - uses: actions/checkout@v2.1.0
+      - name: Check out code
+        uses: actions/checkout@v2
         with:
           repository: 'containerd/stargz-snapshotter'
 
-      - uses: uraimo/run-on-arch-action@v2.0.5
-        name: Run commands
-        id: runcmd
-        with:
-          arch: ${{ matrix.arch }}
-          distro: ${{ matrix.distro }}
-
-          # Not required, but speeds up builds
-          githubToken: ${{ github.token }}
-
-          # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/artifacts"
-
-          # Mount the artifacts directory as /artifacts in the container
-          dockerRunArgs: |
-            --volume "${PWD}/artifacts:/out"
-
-          # The shell to run commands with in the container
-          shell: /bin/sh
-
-          # Install some dependencies in the container. This speeds up builds if
-          # you are also using githubToken. Any dependencies installed here will
-          # be part of the container image that gets cached, so subsequent
-          # builds don't have to re-install them. The image layer is cached
-          # publicly in your project's package repository, so it is vital that
-          # no secrets are present in the container state or logs.
-          install: |
-            apt-get -y install make
-
-          run: |
-            ls
-            make containerd-stargz-grpc
-            make ctr-remote
+      - name: Build
+        run: |
+          export GOARCH=arm64
+          export GOOS=linux
+          make containerd-stargz-grpc
+          make ctr-remote
+          ls ./out

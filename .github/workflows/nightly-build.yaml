@@ -35,6 +35,7 @@ jobs:
           distro: ${{ matrix.distro }}
 
           run: |
+            sudo apt-get install build-essential
             make containerd-stargz-grpc
             make ctr-remote
             ls ./out

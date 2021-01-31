@@ -49,7 +49,6 @@ jobs:
           ls ./../main/releases/
 
       - name: Update artifacts
-        working-directory: ./main
         uses: actions/upload-artifact@v2
         with:
           name: stargz-snapshotter-nightly-linux-arm64.tar.gz

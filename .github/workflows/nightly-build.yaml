@@ -26,7 +26,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
         with:
-          repository: 'https://github.com/containerd/stargz-snapshotter'
+          repository: 'containerd/stargz-snapshotter'
 
       - name: Build
         run: |

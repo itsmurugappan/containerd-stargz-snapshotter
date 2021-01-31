@@ -8,13 +8,13 @@ jobs:
 
   build:
     runs-on: ubuntu-20.04
-    name: Build on ubuntu-18.04 armv64
+    name: Build on ubuntu-20.04 armv64
     strategy:
       matrix:
         go-version: [1.15.x]
-        platform: [ubuntu-latest]
-
-    runs-on: ${{ matrix.platform }}
+        include:
+          - arch: aarch64
+            distro: ubuntu20.04
 
     steps:
 

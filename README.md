@@ -27,17 +27,19 @@ This daemon needs to be running in every node of the cluster
 
 For amd-64 image , please fetch from the release folder of the stargz snapshotter repo.
 
-for arm 64 image , download from this repo
+for arm 64 image , download from this repo. Choose one from nightly or versioned release. Please set as env variable.
 
 ```shell
+export artifact_type=nightly
 pushd $(pwd) && \
 git clone https://github.com/itsmurugappan/stargz-snapshotter-k3s.git && \
 cd stargz-snapshotter-k3s/files && \
 sudo mkdir -p /etc/containerd-stargz-grpc && \
 sudo mv config/etc/containerd-stargz-grpc/config.toml /etc/containerd-stargz-grpc/ && \
 sudo mv stargz-snapshotter.service /etc/systemd/system/ && \
-sudo gunzip stargz-snapshotter-v0.2.0-linux-arm64.tar.gz || true && \
-sudo tar -xvf stargz-snapshotter-v0.2.0-linux-arm64.tar && \
+sudo cd ./../releases/ && \
+sudo gunzip stargz-snapshotter-${artifact_type}-linux-arm64.tar.gz || true && \
+sudo tar -xvf stargz-snapshotter-${artifact_type}-linux-arm64.tar && \
 sudo chmod +x -R out/ && \
 sudo mv out/* /usr/local/bin/ && \
 sudo systemctl enable stargz-snapshotter && \

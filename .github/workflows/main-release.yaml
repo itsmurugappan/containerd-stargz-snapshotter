@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+
+  release:
+    name: Release
+    strategy:
+      matrix:
+        go-version: [1.15.x]
+        platform: [ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+        id: go
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+
+
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          repository: 'containerd/stargz-snapshotter'
+          path: stargz-snapshotter
+          ref: v0.3.0
+
+      - name: Build
+        working-directory: ./stargz-snapshotter
+        run: |
+          export GOARCH=arm64
+          export GOOS=linux
+          make containerd-stargz-grpc
+          make ctr-remote
+          tar -cvf stargz-snapshotter-v0.3.0-linux-arm64.tar ./out/
+          gzip stargz-snapshotter-v0.3.0-linux-arm64.tar
+          mv stargz-snapshotter-v0.3.0-linux-arm64.tar.gz ./../main/releases/
+
+      - name: Update artifacts
+        working-directory: ./main
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "v0.3.0 artifacts updated"
+          git push

@@ -31,10 +31,10 @@ jobs:
         name: Run commands
         id: runcmd
         with:
-          arch: armv64
-          distro: ubuntu20.04
+          arch: ${{ matrix.arch }}
+          distro: ${{ matrix.distro }}
 
           run: |
             make containerd-stargz-grpc
             make ctr-remote
-            ls
+            ls ./out

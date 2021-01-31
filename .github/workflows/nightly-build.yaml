@@ -45,10 +45,13 @@ jobs:
           tar -cvf stargz-snapshotter-nightly-linux-arm64.tar ./out/
           gzip stargz-snapshotter-nightly-linux-arm64.tar
           mv stargz-snapshotter-nightly-linux-arm64.tar.gz ./../main/releases/
-          cd ./../main
 
       - name: Update artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: stargz-snapshotter-nightly-linux-arm64.tar.gz
-          path: releases/stargz-snapshotter-nightly-linux-arm64.tar.gz
+        working-directory: ./main
+        run: |
+          date > generated.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "nightly artifacts updated"
+          git push

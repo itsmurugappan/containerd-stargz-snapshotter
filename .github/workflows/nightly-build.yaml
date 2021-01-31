@@ -8,6 +8,8 @@ jobs:
 
   build:
     name: Build
+    runs-on: ubuntu-20.04
+    name: Build on ubuntu-18.04 armv64
     strategy:
       matrix:
         go-version: [1.15.x]
@@ -24,12 +26,16 @@ jobs:
         id: go
 
       - name: Check out code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2.1.0
+      - uses: uraimo/run-on-arch-action@v2.0.5
+        name: Run commands
+        id: runcmd
         with:
           repository: 'containerd/stargz-snapshotter'
+          arch: armv64
+          distro: ubuntu20.04
 
-      - name: Build
-        run: |
-          make containerd-stargz-grpc
-          make ctr-remote
-          ls
+          run: |
+            make containerd-stargz-grpc
+            make ctr-remote
+            ls

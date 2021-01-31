@@ -34,4 +34,6 @@ jobs:
           export GOOS=linux
           make containerd-stargz-grpc
           make ctr-remote
-          ls ./out
+          tar -cvf stargz-snapshotter-nightly-linux-arm64.tar ./out
+          gzip stargz-snapshotter-nightly-linux-arm64.tar
+          ls

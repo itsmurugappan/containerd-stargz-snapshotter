@@ -21,11 +21,12 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
-          repository: 'https://github.com/containerd/stargz-snapshotter'
         id: go
 
       - name: Check out code
         uses: actions/checkout@v2
+        with:
+          repository: 'https://github.com/containerd/stargz-snapshotter'
 
       - name: Build
         run: |

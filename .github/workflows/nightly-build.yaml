@@ -38,7 +38,6 @@ jobs:
       - name: Build
         working-directory: ./stargz-snapshotter
         run: |
-          ls
           export GOARCH=arm64
           export GOOS=linux
           make containerd-stargz-grpc
@@ -46,7 +45,7 @@ jobs:
           tar -cvf stargz-snapshotter-nightly-linux-arm64.tar ./out/
           gzip stargz-snapshotter-nightly-linux-arm64.tar
           mv stargz-snapshotter-nightly-linux-arm64.tar.gz ./../main/releases/
-          ls ./../main/releases/
+          cd ./../main
 
       - name: Update artifacts
         uses: actions/upload-artifact@v2

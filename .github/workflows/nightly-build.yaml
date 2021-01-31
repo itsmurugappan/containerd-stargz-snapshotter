@@ -1,8 +1,8 @@
 name: Build
 
 on:
-  push:
-    branches: [ 'nightly']
+  schedule:
+  - cron: "0 0 * * *"
 
 jobs:
 
@@ -49,7 +49,6 @@ jobs:
       - name: Update artifacts
         working-directory: ./main
         run: |
-          date > generated.txt
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .

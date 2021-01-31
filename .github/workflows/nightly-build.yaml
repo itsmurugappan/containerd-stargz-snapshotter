@@ -23,17 +23,34 @@ jobs:
           go-version: ${{ matrix.go-version }}
         id: go
 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+
+
       - name: Check out code
         uses: actions/checkout@v2
         with:
           repository: 'containerd/stargz-snapshotter'
+          path: stargz-snapshotter
 
       - name: Build
+        working-directory: ./stargz-snapshotter
         run: |
+          ls
           export GOARCH=arm64
           export GOOS=linux
           make containerd-stargz-grpc
           make ctr-remote
-          tar -cvf stargz-snapshotter-nightly-linux-arm64.tar ./out
+          tar -cvf stargz-snapshotter-nightly-linux-arm64.tar ./out/
           gzip stargz-snapshotter-nightly-linux-arm64.tar
-          ls
+          mv stargz-snapshotter-nightly-linux-arm64.tar.gz ./../main/releases/
+          ls ./../main/releases/
+
+      - name: Update artifacts
+        working-directory: ./main
+        uses: actions/upload-artifact@v2
+        with:
+          name: stargz-snapshotter-nightly-linux-arm64.tar.gz
+          path: releases/stargz-snapshotter-nightly-linux-arm64.tar.gz

@@ -14,7 +14,7 @@ This set up will be on arm64 cluster with Ubuntu (version: Ubuntu 20.04.1 LTS)
 
 ### stargz-snapshotter
 
-This daemon needs to be running in every node of the cluster. Choose between nightly or release
+This daemon needs to be running in every node of the cluster. Choose between nightly and release
 
 #### Release
 
@@ -60,7 +60,7 @@ sudo systemctl restart stargz-snapshotter && \
 cd ..
 ```
 
-### 3. k3s
+### k3s
 
 Please fetch the latest k3s (1.19.x onwards) to get the containerd newer than 1.4.1 which is a pre req for using this.
 

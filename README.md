@@ -18,7 +18,7 @@ This daemon needs to be running in every node of the cluster. Choose between nig
 
 #### Release
 
-```
+```shell
 export tag=v0.4.1
 
 pushd $(pwd) && \

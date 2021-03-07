@@ -1,4 +1,4 @@
-# Image Pull Optimization with stargz snapshotter 
+# Image Pull Optimization with stargz snapshotter on k3s
 
 This repo will outline the steps to use stargz snapshotter with k3s on a 
 rasberrry pi cluster and the benefits of using the same
@@ -12,35 +12,36 @@ https://github.com/containerd/stargz-snapshotter
 
 This set up will be on arm64 cluster with Ubuntu (version: Ubuntu 20.04.1 LTS)
 
-### 1. Install Fuse
-
-This snapshotter leverages [crfs](https://github.com/google/crfs) hence the 
-dependency on fuse
-
-```shell
-apt-get update -y && apt-get install --no-install-recommends -y fuse
-```
-
-### 2. stargz-snapshotter
+### stargz-snapshotter
 
 This daemon needs to be running in every node of the cluster
 
-For amd-64 image , please fetch from the release folder of the stargz snapshotter repo.
+#### Release
+For releases , please download from [here](https://github.com/containerd/stargz-snapshotter/releases/) into the [releases folder](./releases)
 
-for arm 64 image , download from this repo. Choose one from nightly or versioned release. Please set as env variable.
+```
+export tag = v0.4.1
+
+cd releases
+
+curl -LO https://github.com/containerd/stargz-snapshotter/releases/download/$tag/stargz-snapshotter-$tag-linux-arm64.tar.gz
+```
+
+#### Nightly
+For nightly arm 64 image , download from this repo.
 
 ```shell
-# choose one of nightly or v0.3.0
-export artifact_type=nightly
+# choose one of nightly or point to the download zip
+export artifact_name=./releases/stargz-snapshotter-nightly-linux-arm64
 pushd $(pwd) && \
 git clone https://github.com/itsmurugappan/stargz-snapshotter-k3s.git && \
 cd stargz-snapshotter-k3s/files && \
 sudo mkdir -p /etc/containerd-stargz-grpc && \
 sudo mv config/etc/containerd-stargz-grpc/config.toml /etc/containerd-stargz-grpc/ && \
 sudo mv stargz-snapshotter.service /etc/systemd/system/ && \
-cd ./../releases/ && \
-sudo gunzip stargz-snapshotter-${artifact_type}-linux-arm64.tar.gz || true && \
-sudo tar -xvf stargz-snapshotter-${artifact_type}-linux-arm64.tar && \
+cd ./.. && \
+sudo gunzip ${artifact_name}.tar.gz || true && \
+sudo tar -xvf ${artifact_name}.tar && \
 sudo chmod +x -R out/ && \
 sudo mv out/* /usr/local/bin/ && \
 sudo systemctl enable stargz-snapshotter && \
@@ -123,7 +124,7 @@ For building the estargz image you need the ctr-remote client which would be ins
 docker login ghcr.io
 
 # below is the way to optimize a java non estgz image
-sudo ctr-remote image optimize  --reuse  --entrypoint='["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/helloworld.jar"]' \
+sudo ctr-remote image optimize  --oci --reuse  --entrypoint='["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/helloworld.jar"]' \
            ghcr.io/itsmurugappan/java-hw:latest \
            ghcr.io/itsmurugappan/java-hw-estgz
 ```

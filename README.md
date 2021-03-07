@@ -14,25 +14,36 @@ This set up will be on arm64 cluster with Ubuntu (version: Ubuntu 20.04.1 LTS)
 
 ### stargz-snapshotter
 
-This daemon needs to be running in every node of the cluster
+This daemon needs to be running in every node of the cluster. Choose between nightly or release
 
 #### Release
-For releases , please download from [here](https://github.com/containerd/stargz-snapshotter/releases/) into the [releases folder](./releases)
 
 ```
-export tag = v0.4.1
+export tag=v0.4.1
 
-cd releases
-
-curl -LO https://github.com/containerd/stargz-snapshotter/releases/download/$tag/stargz-snapshotter-$tag-linux-arm64.tar.gz
+pushd $(pwd) && \
+sudo mkdir -p stargz-snapshotter-k3s/files && cd stargz-snapshotter-k3s && \
+sudo curl -LO https://github.com/containerd/stargz-snapshotter/releases/download/$tag/stargz-snapshotter-$tag-linux-arm64.tar.gz && \
+cd files && \
+sudo curl -LO https://raw.githubusercontent.com/itsmurugappan/containerd-stargz-snapshotter/main/files/config.toml.tmpl && \
+sudo curl -LO https://raw.githubusercontent.com/itsmurugappan/containerd-stargz-snapshotter/main/files/stargz-snapshotter.service && 
+sudo curl -LO https://raw.githubusercontent.com/itsmurugappan/containerd-stargz-snapshotter/main/files/config/etc/containerd-stargz-grpc/config.toml && \
+sudo mkdir -p /etc/containerd-stargz-grpc && \
+sudo mv config.toml /etc/containerd-stargz-grpc/ && \
+sudo mv stargz-snapshotter.service /etc/systemd/system/ && \
+cd .. && \
+sudo gunzip stargz-snapshotter-$tag-linux-arm64.tar.gz || true && \
+sudo tar -xvf stargz-snapshotter-$tag-linux-arm64.tar && \
+sudo chmod +x containerd-stargz-grpc ctr-remote && \
+sudo mv ctr-remote containerd-stargz-grpc /usr/local/bin/ && \
+sudo systemctl enable stargz-snapshotter && \
+sudo systemctl restart stargz-snapshotter
 ```
 
 #### Nightly
 For nightly arm 64 image , download from this repo.
 
 ```shell
-# choose one of nightly or point to the download zip
-export artifact_name=./releases/stargz-snapshotter-nightly-linux-arm64
 pushd $(pwd) && \
 git clone https://github.com/itsmurugappan/stargz-snapshotter-k3s.git && \
 cd stargz-snapshotter-k3s/files && \
@@ -40,8 +51,8 @@ sudo mkdir -p /etc/containerd-stargz-grpc && \
 sudo mv config/etc/containerd-stargz-grpc/config.toml /etc/containerd-stargz-grpc/ && \
 sudo mv stargz-snapshotter.service /etc/systemd/system/ && \
 cd ./.. && \
-sudo gunzip ${artifact_name}.tar.gz || true && \
-sudo tar -xvf ${artifact_name}.tar && \
+sudo gunzip releases/stargz-snapshotter-nightly-linux-arm64.tar.gz || true && \
+sudo tar -xvf releases/stargz-snapshotter-nightly-linux-arm64.tar && \
 sudo chmod +x -R out/ && \
 sudo mv out/* /usr/local/bin/ && \
 sudo systemctl enable stargz-snapshotter && \
